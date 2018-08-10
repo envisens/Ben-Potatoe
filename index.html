@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ben Potatoe</title>
+        <meta charset="utf-8" />
+        <style>
+            html, body, #map {
+                height: 100%;
+                margin: 0px;
+                padding: 0px
+            }
+        </style>
+
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript">
+            var map;
+
+            function initialize() {
+                var options = {
+                    zoom: 17,
+                    center: new google.maps.LatLng(52.2817, -4.00548),
+                    mapTypeId: google.maps.MapTypeId.roadmap
+                };
+
+                map = new google.maps.Map(document.getElementById("map"), options);
+
+                var bounds = {
+                    17: [[64076, 64079], [43126, 43129]],
+                    18: [[128152, 128158], [86253, 86258]],
+                    19: [[256304, 256316], [172507, 172516]],
+                    20: [[512608, 512633], [345014, 345033]],
+                    21: [[1025217, 1025267], [690028, 690066]],
+                    22: [[2050435, 2050534], [1380056, 1380132]]
+                };
+
+                var imageMapType = new google.maps.ImageMapType({
+                    getTileUrl: function(coord, zoom) {
+                        if (zoom < 17 || zoom > 22 ||
+                            bounds[zoom][0][0] > coord.x || coord.x > bounds[zoom][0][1] ||
+                            bounds[zoom][1][0] > coord.y || coord.y > bounds[zoom][1][1]) {
+                            return null;
+                        }
+
+                        return zoom + "/" + coord.x + "/" + coord.y + ".png";
+                    },
+                    tileSize: new google.maps.Size(256, 256)
+                });
+
+                map.overlayMapTypes.push(imageMapType);
+            }
+
+            google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+    </head>
+    <body>
+        <div id="map"></div>
+    </body>
+</html>
